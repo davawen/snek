@@ -27,7 +27,7 @@ typedef struct
 	int               *playerSpeed;
 	int               *applePos;
 	
-	bool               pressedKey; // Allow more responsible input
+	//bool               pressedKey; // Allow more responsive input
 	bool               finished;
 } DATA;
 
@@ -121,23 +121,23 @@ void inputControl()
 		{
 			case 65: // UP
 				*g_data.playerSpeed = -width;
-				g_data.pressedKey = true;
+				//g_data.pressedKey = true;
 				break;
 			case 66: // DOWN
 				*g_data.playerSpeed = width;
-				g_data.pressedKey = true;
+				//g_data.pressedKey = true;
 				break;
 			case 67: // RIGHT
 				*g_data.playerSpeed = 1;
-				g_data.pressedKey = true;
+				//g_data.pressedKey = true;
 				break;
 			case 68: // LEFT
 				*g_data.playerSpeed = -1;
-				g_data.pressedKey = true;
+				//g_data.pressedKey = true;
 				break;
 			case 'q':
 				g_data.finished = true;
-				g_data.pressedKey = true;
+				//g_data.pressedKey = true;
 				break;
 		}
 	}
@@ -185,12 +185,12 @@ int main(int argc, char **argv)
 		
 		while((currentTime = now()) - startTime < 250'000)
 		{
-			if(currentTime - startTime > 50'000 && g_data.pressedKey) break;
+			// if(currentTime - startTime > 50'000 && g_data.pressedKey) break;
 		}
 		
 		std::unique_lock<std::mutex> lock(mutex, std::try_to_lock);
 		
-		g_data.pressedKey = false;
+		// g_data.pressedKey = false;
 		
 		int newPos = (*g_data.playerPos)[0] + *g_data.playerSpeed;
 		bool lost = false;
@@ -198,9 +198,9 @@ int main(int argc, char **argv)
 		// Shift all positions by one
 		for(size_t i = g_data.playerPos->size(); i > 0; i--)
 		{
-			if(playerSpeed != 0 && newPos == (*g_data.playerPos)[i]) lost = true;
-			
 			(*g_data.playerPos)[i] = (*g_data.playerPos)[i - 1];
+			
+			if(playerSpeed != 0 && newPos == (*g_data.playerPos)[i]) lost = true;
 		}
 		
 		if(g_data.finished) break;
@@ -228,7 +228,7 @@ int main(int argc, char **argv)
 		}
 		else if(newPos == applePos)
 		{
-			g_data.playerPos->push_back(abs(g_data.playerPos->back() - *g_data.playerSpeed));
+			g_data.playerPos->push_back(g_data.playerPos->back());
 			
 			setApplePos();
 		}
